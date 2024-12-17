@@ -3,8 +3,8 @@ import json
 client_details = []
 client_details = client_details
 
-client_id = str(input("Enter your client id for your Spotify API"))
-client_secret = str(input("Enter your client secret for your Spotify API"))
+client_id = str(input("Enter your client id for your Spotify API: "))
+client_secret = str(input("Enter your client secret for your Spotify API: "))
 
 client_details = {"client_id" : client_id,
                   "client_secret":  client_secret }
