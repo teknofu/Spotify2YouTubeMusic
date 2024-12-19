@@ -12,7 +12,9 @@ os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 api_service_name = "youtube"
 api_version = "v3"
 client_secrets_file = "client_secret_YouTube.json"
-
+print("We have to get authorized with Google to use the Youtube API")
+print("Your browser will open and prompt you to authorize the use and editing ability of your Youtube playlists")
+input("Press enter to continue")
 # Get credentials and create an API client
 flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(client_secrets_file, scopes)
 credentials = flow.run_local_server()
@@ -20,12 +22,28 @@ youtube = googleapiclient.discovery.build(api_service_name, api_version, credent
 
 with open("client_codes_Spotify.json") as f:
     client_codes = json.load(f)
-
-# Initializes Spotify API client codes 
+print(
+    "First Create a playlist on Youtube Music for the songs to be transferred to and wait a few minutes for the server to propagate the url")
+input("Press Enter to continue...")  # Waits for user input
+# Initializes Spotify API client codes
 client_id = str(client_codes["client_id"])
 client_secret = str(client_codes["client_secret"])
 app_token = request_client_token(client_id, client_secret)
-playlist_id_youtube = input("Enter the YouTube id")
+playlist_id_youtube = input(
+    "Now view your playlist page on Youtube Music\r enter the playlist url(https://music.youtube.com/playlist?list=gobblygookhere) you created here: ")
+
+if "https://music.youtube.com/browse/" in playlist_id_youtube:
+    # Extract the playlist ID
+    start_index = playlist_id_youtube.find("browse/") + len("browse/")
+    playlist_id = playlist_id_youtube[start_index:]
+
+    # Update playlist_id_youtube with the new format
+    playlist_id_youtube = f"https://music.youtube.com/playlist?list={playlist_id}"
+
+    print(f"Playlist ID updated: {playlist_id_youtube}")
+else:
+    print("Playlist ID already in the correct format.")
+playlist_id_youtube = playlist_id_youtube.removeprefix("https://music.youtube.com/playlist?list=")
 attempts = 0
 
 
@@ -33,7 +51,8 @@ attempts = 0
 def get_song_spotify(app_token):
     global attempts
     spotify = Spotify(app_token)
-    playlist_id_spotify = input("Enter the spotify playlist id")
+    playlist_id_spotify = input("Enter the url of the spotify playlist you want to copy: ")
+    playlist_id_spotify = playlist_id_spotify.removeprefix("https://open.spotify.com/playlist/")
     playlist = spotify.playlist_items(playlist_id_spotify, as_tracks=True)
     print(playlist)
     playlist = playlist["items"]
@@ -42,7 +61,7 @@ def get_song_spotify(app_token):
         i = 0
         songIds = []
         whileLoop = True
-        
+
         # Gets the song ids from the returned dictionary
         while whileLoop:
             subPlaylist = playlist[i]
