@@ -23,7 +23,7 @@ youtube = googleapiclient.discovery.build(api_service_name, api_version, credent
 with open("client_codes_Spotify.json") as f:
     client_codes = json.load(f)
 print(
-    "First Create a playlist on Youtube Music for the songs to be transferred to and wait a few minutes for the server to propagate the url")
+    "First Create a playlist on Youtube Music for the songs to be transferred to and copy the url")
 input("Press Enter to continue...")  # Waits for user input
 # Initializes Spotify API client codes
 client_id = str(client_codes["client_id"])
