@@ -30,12 +30,17 @@ client_id = str(client_codes["client_id"])
 client_secret = str(client_codes["client_secret"])
 app_token = request_client_token(client_id, client_secret)
 playlist_id_youtube = input(
-    "Now view your playlist page on Youtube Music\r enter the playlist url(https://music.youtube.com/playlist?list=gobblygookhere) you created here: ")
+    "Now view your playlist page on Youtube Music\r enter the url of the playlist you created here: ")
+
+
 
 if "https://music.youtube.com/browse/" in playlist_id_youtube:
+    playlist_id_youtube = playlist_id_youtube.replace("/browse/VL", "/browse/")
+
     # Extract the playlist ID
     start_index = playlist_id_youtube.find("browse/") + len("browse/")
     playlist_id = playlist_id_youtube[start_index:]
+    print(f"playlist_id is {playlist_id}")
 
     # Update playlist_id_youtube with the new format
     playlist_id_youtube = f"https://music.youtube.com/playlist?list={playlist_id}"
@@ -45,6 +50,7 @@ else:
     print("Playlist ID already in the correct format.")
 playlist_id_youtube = playlist_id_youtube.removeprefix("https://music.youtube.com/playlist?list=")
 attempts = 0
+
 
 
 # Gets the name of the song and the artist from a spotify playlist
